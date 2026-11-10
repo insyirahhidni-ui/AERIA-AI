@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AERIA AI</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background: #f5f5e9;
+    color: #344b3b;
+}
+
+header {
+    background: #dce8d5;
+    padding: 22px;
+    text-align: center;
+}
+
+.logo {
+    font-size: 30px;
+    font-weight: bold;
+    letter-spacing: 3px;
+}
+
+.tagline {
+    font-size: 13px;
+    margin-top: 7px;
+}
+
+main {
+    max-width: 650px;
+    margin: 35px auto;
+    padding: 20px;
+}
+
+.card {
+    background: white;
+    padding: 25px;
+    border-radius: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 12px #00000010;
+}
+
+h2 {
+    margin-bottom: 12px;
+}
+
+p {
+    line-height: 1.6;
+}
+
+button {
+    background: #789477;
+    color: white;
+    border: none;
+    padding: 13px 22px;
+    border-radius: 12px;
+    margin-top: 15px;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+footer {
+    text-align: center;
+    padding: 20px;
+    font-size: 12px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo">AERIA AI</div>
+    <div class="tagline">
+        AI-Powered Breathing & Wellness Assistant
+    </div>
+</header>
+
+<main>
+
+    <div class="card">
+        <h2>Welcome to AERIA AI 🌿</h2>
+        <p>
+            Your personal companion for breathing awareness,
+            wellness monitoring and relaxation.
+        </p>
+    </div>
+
+    <div class="card">
+        <h2>60-Second Breathing</h2>
+        <p>Take a short moment to relax and focus on your breathing.</p>
+        <button onclick="startBreathing()">Start Breathing</button>
+        <p id="timer">60 seconds</p>
+    </div>
+
+    <div class="card">
+        <h2>AI Posture Analysis</h2>
+        <p>
+            Explore preliminary posture indicators that may
+            be associated with fatigue.
+        </p>
+        <button onclick="alert('AI analysis connection is being prepared.')">
+            Start Analysis
+        </button>
+    </div>
+
+</main>
+
+<footer>
+    © 2026 AERIA AI | Wellness Awareness
+</footer>
+
+<script>
+function startBreathing() {
+    let time = 60;
+    let timer = document.getElementById("timer");
+
+    timer.innerHTML = "Inhale";
+
+    let interval = setInterval(function() {
+        time--;
+
+        if (time <= 0) {
+            clearInterval(interval);
+            timer.innerHTML = "Session completed!";
+        } else {
+            timer.innerHTML = time + " seconds";
+        }
+    }, 1000);
+}
+</script>
+
+</body>
+</html>
