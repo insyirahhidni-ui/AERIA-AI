@@ -6,9 +6,7 @@ from functools import wraps
 
 app = Flask(name)
 
-app.secret_key = os.environ.get(
-    "SECRET_KEY", "aeria-development-key-change-before-launch"
-)
+app.secret_key = os.environ.get("SECRET_KEY", "aeria-development-key")
 
 DATABASE = "aeria_users.db"
 
@@ -100,4 +98,68 @@ def login():
 
     if user and check_password_hash(user["password"], password):
         session.clear()
-                session["user_id"] = user["id"]
+        session["user_id"] = user["id"]
+        session["username"] = user["username"]
+
+        return jsonify({
+            "message": "Login successful",
+            "username": user["username"]
+        })
+
+    return jsonify({"error": "Invalid username or password"}), 401
+
+
+# CHECK LOGIN
+@app.route("/api/me")
+def me():
+    if "user_id" in session:
+        return jsonify({
+            "logged_in": True,
+            "username": session["username"]
+        })
+
+    return jsonify({"logged_in": False})
+
+
+# LOGOUT
+@app.route("/api/logout", methods=["POST"])
+def logout():
+    session.clear()
+    return jsonify({"message": "Logged out"})
+
+
+# AI ANALYSIS
+@app.route("/api/analysis", methods=["GET", "POST"])
+@login_required
+def analysis():
+    global latest_analysis
+
+    if request.method == "GET":
+        return jsonify(latest_analysis)
+
+    data = request.get_json() or {}
+
+    latest_analysis = {
+        "class": data.get("class", "Unknown"),
+        "confidence": data.get("confidence", 0)
+    }
+
+    return jsonify({
+        "received": True,
+        "result": latest_analysis
+    })
+
+
+# STATUS
+@app.route("/api/status")
+def status():
+    return jsonify({
+        "app": "AERIA AI",
+        "status": "online"
+    })
+
+
+# START SERVER
+if name == "main":
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)
