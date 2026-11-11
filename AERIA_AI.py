@@ -4,8 +4,7 @@ import sqlite3
 import os
 from functools import wraps
 
-app = Flask(__name__)
-
+app = Flask(name)
 app.secret_key = os.environ.get("SECRET_KEY", "aeria-development-key")
 
 DATABASE = "aeria_users.db"
@@ -16,7 +15,6 @@ latest_analysis = {
 }
 
 
-# DATABASE
 def get_db():
     conn = sqlite3.connect(DATABASE)
     conn.row_factory = sqlite3.Row
@@ -37,7 +35,6 @@ def init_db():
 init_db()
 
 
-# LOGIN PROTECTION
 def login_required(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
@@ -47,17 +44,14 @@ def login_required(func):
     return wrapper
 
 
-# WEBSITE
 @app.route("/")
 def home():
     return send_from_directory(".", "index.html")
 
 
-# REGISTER
 @app.route("/api/register", methods=["POST"])
 def register():
     data = request.get_json() or {}
-
     username = data.get("username", "").strip()
     password = data.get("password", "")
 
@@ -75,18 +69,14 @@ def register():
                 "INSERT INTO users (username, password) VALUES (?, ?)",
                 (username, hashed_password)
             )
-
         return jsonify({"message": "Registration successful!"})
-
     except sqlite3.IntegrityError:
         return jsonify({"error": "Username already exists"}), 409
 
 
-# LOGIN
 @app.route("/api/login", methods=["POST"])
 def login():
     data = request.get_json() or {}
-
     username = data.get("username", "").strip()
     password = data.get("password", "")
 
@@ -109,7 +99,6 @@ def login():
     return jsonify({"error": "Invalid username or password"}), 401
 
 
-# CHECK LOGIN
 @app.route("/api/me")
 def me():
     if "user_id" in session:
@@ -121,14 +110,12 @@ def me():
     return jsonify({"logged_in": False})
 
 
-# LOGOUT
 @app.route("/api/logout", methods=["POST"])
 def logout():
     session.clear()
     return jsonify({"message": "Logged out"})
 
 
-# AI ANALYSIS
 @app.route("/api/analysis", methods=["GET", "POST"])
 @login_required
 def analysis():
@@ -150,7 +137,6 @@ def analysis():
     })
 
 
-# STATUS
 @app.route("/api/status")
 def status():
     return jsonify({
@@ -159,7 +145,6 @@ def status():
     })
 
 
-# START SERVER
-if__name__ == "__main__":
+if name == "main":
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
