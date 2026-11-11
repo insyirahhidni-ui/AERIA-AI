@@ -4,7 +4,7 @@ import sqlite3
 import os
 from functools import wraps
 
-app = Flask(_name_)
+app = Flask(__name__)
 
 app.secret_key = os.environ.get("SECRET_KEY", "aeria-development-key")
 
