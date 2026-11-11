@@ -46,4 +46,278 @@ main {
     padding: 25px;
     border-radius: 20px;
     margin-bottom: 20px;
-    box-shadow
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+}
+
+h2 {
+    margin-bottom: 15px;
+}
+
+input {
+    width: 100%;
+    padding: 13px;
+    margin: 8px 0;
+    border: 1px solid #ccd8c8;
+    border-radius: 10px;
+}
+
+button {
+    background: #789779;
+    color: white;
+    border: none;
+    padding: 13px 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+button:hover {
+    background: #5d7c60;
+}
+
+.switch {
+    color: #66876b;
+    cursor: pointer;
+    margin-top: 15px;
+    display: block;
+}
+
+.hidden {
+    display: none;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo">AERIA AI</div>
+    <div class="tagline">Breathe Better. Live Better.</div>
+</header>
+
+<main>
+
+<section id="loginPage" class="card">
+    <h2>Welcome Back</h2>
+    <p>Login to your AERIA AI account.</p>
+
+    <input type="text" id="loginUsername" placeholder="Username">
+    <input type="password" id="loginPassword" placeholder="Password">
+
+    <button onclick="login()">Login</button>
+
+    <span class="switch" onclick="showRegister()">
+        Don't have an account? Register
+    </span>
+    <p id="loginMessage"></p>
+</section>
+
+<section id="registerPage" class="card hidden">
+    <h2>Create Account</h2>
+    <p>Join AERIA AI today.</p>
+
+    <input type="text" id="registerUsername" placeholder="Username">
+    <input type="password" id="registerPassword" placeholder="Password">
+
+    <button onclick="register()">Register</button>
+
+    <span class="switch" onclick="showLogin()">
+        Already have an account? Login
+    </span>
+    <p id="registerMessage"></p>
+</section>
+<section id="homePage" class="hidden">
+
+    <div class="card">
+        <h2>Hello, welcome to AERIA AI!</h2>
+        <p>Your breathing and wellness companion.</p>
+        <br>
+        <h3>🌿 Take a moment to breathe.</h3>
+        <p>Relax your mind and focus on your breathing.</p>
+    </div>
+
+    <div class="card">
+        <h2>60 Seconds Breathing</h2>
+        <p id="breathText">Ready to begin?</p>
+
+        <h1 id="timer">60</h1>
+
+        <button onclick="startBreathing()">Start</button>
+        <button onclick="resetBreathing()">Reset</button>
+    </div>
+
+    <div class="card">
+        <h2>AI Analysis</h2>
+        <p>Check your current wellness indicators.</p>
+
+        <h3 id="analysisResult">Belum dianalisis</h3>
+        <p id="confidence">Confidence: 0%</p>
+
+        <button onclick="getAnalysis()">View Analysis</button>
+
+        <p style="margin-top:15px;font-size:12px;">
+            Disclaimer: AI results are preliminary screening
+            and precautionary indicators only. They are not
+            a medical diagnosis. Please consult a doctor or
+            qualified healthcare professional for further
+            assessment and information.
+        </p>
+    </div>
+
+    <div class="card">
+        <h2>My Account</h2>
+        <p id="welcomeUser"></p>
+        <button onclick="logout()">Log Out</button>
+    </div>
+
+</section>
+<script>
+
+function showRegister() {
+    document.getElementById("loginPage").classList.add("hidden");
+    document.getElementById("registerPage").classList.remove("hidden");
+}
+
+function showLogin() {
+    document.getElementById("registerPage").classList.add("hidden");
+    document.getElementById("loginPage").classList.remove("hidden");
+}
+
+async function register() {
+    const username = document.getElementById("registerUsername").value;
+    const password = document.getElementById("registerPassword").value;
+
+    try {
+        const response = await fetch("/api/register", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({username, password})
+        });
+
+        const data = await response.json();
+        document.getElementById("registerMessage").textContent =
+            data.message || data.error;
+
+        if (response.ok) showLogin();
+
+    } catch (error) {
+        document.getElementById("registerMessage").textContent =
+            "Connection error. Please try again.";
+    }
+}
+
+async function login() {
+    const username = document.getElementById("loginUsername").value;
+    const password = document.getElementById("loginPassword").value;
+
+    try {
+        const response = await fetch("/api/login", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({username, password})
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            showHome(data.username);
+        } else {
+            document.getElementById("loginMessage").textContent =
+                data.error;
+        }
+
+    } catch (error) {
+        document.getElementById("loginMessage").textContent =
+            "Connection error. Please try again.";
+    }
+}
+
+function showHome(username) {
+    document.getElementById("loginPage").classList.add("hidden");
+    document.getElementById("registerPage").classList.add("hidden");
+    document.getElementById("homePage").classList.remove("hidden");
+    document.getElementById("welcomeUser").textContent =
+        "Welcome, " + username + "!";
+}
+
+async function logout() {
+    await fetch("/api/logout", {method: "POST"});
+    location.reload();
+}
+
+async function checkLogin() {
+    try {
+        const response = await fetch("/api/me");
+        const data = await response.json();
+
+        if (data.logged_in) {
+            showHome(data.username);
+        }
+    } catch (error) {
+        console.log("Login check failed");
+    }
+}
+
+let timeLeft = 60;
+let timerInterval = null;
+
+function startBreathing() {
+    if (timerInterval !== null) return;
+
+    timerInterval = setInterval(function() {
+        timeLeft--;
+
+        document.getElementById("timer").textContent = timeLeft;
+
+        if (timeLeft > 0 && timeLeft <= 3) {
+            document.getElementById("breathText").textContent = "Exhale";
+        } else if (timeLeft > 3) {
+            document.getElementById("breathText").textContent = "Inhale";
+        }
+
+        if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+            timerInterval = null;
+            document.getElementById("breathText").textContent =
+                "Session completed!";
+        }
+    }, 1000);
+}
+
+function resetBreathing() {
+    clearInterval(timerInterval);
+    timerInterval = null;
+    timeLeft = 60;
+
+    document.getElementById("timer").textContent = "60";
+    document.getElementById("breathText").textContent = "Ready to begin?";
+}
+
+async function getAnalysis() {
+    try {
+        const response = await fetch("/api/analysis");
+        const data = await response.json();
+
+        if (!response.ok) {
+            document.getElementById("analysisResult").textContent =
+                data.error || "Unable to get analysis";
+            return;
+        }
+
+        document.getElementById("analysisResult").textContent =
+            data.class;
+
+        document.getElementById("confidence").textContent =
+            "Confidence: " + data.confidence + "%";} catch (error) {
+        document.getElementById("analysisResult").textContent =
+            "Connection error";
+    }
+}
+
+checkLogin();
+
+</script>
+
+</main>
+</body>
+</html>
