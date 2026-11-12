@@ -255,6 +255,7 @@ function showHome(username) {
     document.getElementById("homePage").classList.remove("hidden");
     document.getElementById("welcomeUser").textContent =
         "Welcome, " + username + "!";
+    getHistory()
 }
 
 async function logout() {
@@ -328,6 +329,53 @@ async function getAnalysis() {
             "Confidence: " + data.confidence + "%";} catch (error) {
         document.getElementById("analysisResult").textContent =
             "Connection error";
+    }
+}
+    async function getHistory() {
+    const container = document.getElementById("historyData");
+
+    container.textContent = "Loading data...";
+
+    try {
+        const response = await fetch("/api/history");
+        const data = await response.json();
+
+        if (!response.ok) {
+            container.textContent = data.error || "Unable to load data.";
+            return;
+        }
+
+        container.innerHTML = "";
+
+        if (data.history.length === 0) {
+            container.textContent = "No analysis records yet.";
+            return;
+        }
+
+        data.history.forEach(record => {
+            const card = document.createElement("div");
+
+            card.style.padding = "15px";
+            card.style.marginTop = "12px";
+            card.style.background = "#f5f5e9";
+            card.style.borderRadius = "12px";
+
+            const result = document.createElement("h3");
+            result.textContent = record.result;
+
+            const confidence = document.createElement("p");
+            confidence.textContent =
+                "Confidence: " + record.confidence + "%";
+
+            const date = document.createElement("p");
+            date.textContent = "Date: " + record.date;
+
+            card.append(result, confidence, date);
+            container.appendChild(card);
+        });
+
+    } catch (error) {
+        container.textContent = "Connection error.";
     }
 }
 
