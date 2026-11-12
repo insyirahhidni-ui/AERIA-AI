@@ -201,26 +201,24 @@ def analysis():
 
     user_id = session["user_id"]
 
-    # GET LATEST ANALYSIS
+# GET LATEST ANALYSIS
     with get_db() as db:
+        record = db.execute(
+            """
+            SELECT result, confidence
+            FROM analyses
+            WHERE user_id = ?
+            ORDER BY id DESC
+            LIMIT 1
+            """,
+            (user_id,)
+        ).fetchone()
 
-            record = db.execute(
-                """
-                SELECT result, confidence
-                FROM analyses
-                WHERE user_id = ?
-                ORDER BY id DESC
-                LIMIT 1
-                """,
-                (user_id,)
-            ).fetchone()
-
-        if record is None:
-
-            return jsonify({
-                "class": "Belum dianalisis",
-                "confidence": 0
-            })
+    if record is None:
+        return jsonify({
+            "class": "Belum dianalisis",
+            "confidence": 0
+        })
 
         return jsonify({
             "class": record["result"],
