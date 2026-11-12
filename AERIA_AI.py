@@ -201,24 +201,26 @@ def analysis():
 
     user_id = session["user_id"]
 
-# GET LATEST ANALYSIS
-    with get_db() as db:
-        record = db.execute(
-            """
-            SELECT result, confidence
-            FROM analyses
-            WHERE user_id = ?
-            ORDER BY id DESC
-            LIMIT 1
-            """,
-            (user_id,)
-        ).fetchone()
+    # GET LATEST ANALYSIS
+    if request.method == "GET":
 
-    if record is None:
-        return jsonify({
-            "class": "Belum dianalisis",
-            "confidence": 0
-        })
+        with get_db() as db:
+            record = db.execute(
+                """
+                SELECT result, confidence
+                FROM analyses
+                WHERE user_id = ?
+                ORDER BY id DESC
+                LIMIT 1
+                """,
+                (user_id,)
+            ).fetchone()
+
+        if record is None:
+            return jsonify({
+                "class": "Belum dianalisis",
+                "confidence": 0
+            })
 
         return jsonify({
             "class": record["result"],
@@ -226,37 +228,29 @@ def analysis():
         })
 
     # RECEIVE AI RESULT
-
-    data = request.get_json() or {}
+    data = request.get_json(silent=True) or {}
 
     result = str(data.get("class", "")).strip()
 
     if not result or len(result) > 100:
-
         return jsonify({
             "error": "Invalid analysis result"
         }), 400
 
     try:
-
         confidence = float(data.get("confidence", 0))
-
     except (ValueError, TypeError):
-
         return jsonify({
             "error": "Invalid confidence"
         }), 400
 
     if not 0 <= confidence <= 100:
-
         return jsonify({
             "error": "Confidence must be 0-100"
         }), 400
 
     # SAVE RESULT
-
     with get_db() as db:
-
         db.execute(
             """
             INSERT INTO analyses
@@ -273,7 +267,6 @@ def analysis():
             "confidence": confidence
         }
     })
-
 
 # ANALYSIS HISTORY
 
