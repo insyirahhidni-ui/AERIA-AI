@@ -233,21 +233,15 @@ def analysis():
     result = str(data.get("class", "")).strip()
 
     if not result or len(result) > 100:
-        return jsonify({
-            "error": "Invalid analysis result"
-        }), 400
+        return jsonify({"error": "Invalid analysis result"}), 400
 
     try:
         confidence = float(data.get("confidence", 0))
     except (ValueError, TypeError):
-        return jsonify({
-            "error": "Invalid confidence"
-        }), 400
+        return jsonify({"error": "Invalid confidence"}), 400
 
     if not 0 <= confidence <= 100:
-        return jsonify({
-            "error": "Confidence must be 0-100"
-        }), 400
+        return jsonify({"error": "Confidence must be 0-100"}), 400
 
     # SAVE RESULT
     with get_db() as db:
