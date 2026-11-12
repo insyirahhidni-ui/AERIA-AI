@@ -74,8 +74,7 @@ function resetBreathing() {
 
 /* AI ANALYSIS */
 
-async function getAnalysis() {
-
+            async function getAnalysis() {
     const resultBox = $("analysisResult");
     const confidenceBox = $("confidence");
     const messageBox = $("analysisMessage");
@@ -87,120 +86,83 @@ async function getAnalysis() {
     $("viewAnalysisButton").disabled = true;
 
     try {
-
-        const {response, data} = await apiRequest(
+        const { response, data } = await apiRequest(
             "/api/analysis?time=" + Date.now()
         );
 
         if (!response.ok) {
-
-            resultBox.textContent =
-                data.error || "Unable to load analysis.";
-
-            messageBox.textContent =
-                "Please check your login and connection.";
-
+            resultBox.textContent = data.error || "Unable to load analysis.";
+            messageBox.textContent = "Please check your login and connection.";
             return;
-
         }
 
-        resultBox.textContent =
-            data.class || "No analysis available.";
+        resultBox.textContent = data.class || "No analysis available.";
 
         confidenceBox.textContent =
             "Confidence: " + (data.confidence ?? 0) + "%";
 
         if (data.class === "Belum dianalisis") {
-
             messageBox.textContent =
                 "No AI analysis has been saved yet. Waiting for PictoBlox AI data.";
-
         } else {
-
             messageBox.textContent =
                 "Latest saved analysis retrieved successfully.";
-
         }
 
     } catch (error) {
-
         console.error("Analysis error:", error);
-
         resultBox.textContent = "Connection error.";
-
         messageBox.textContent =
             "Unable to connect to the analysis service.";
 
     } finally {
-
         $("viewAnalysisButton").disabled = false;
-
     }
-
 }
 
 
 /* ANALYSIS HISTORY */
 
 async function getHistory() {
-
     const container = $("historyData");
-
     container.textContent = "Loading data...";
 
     try {
-
-        const {response, data} = await apiRequest("/api/history");
+        const { response, data } = await apiRequest("/api/history");
 
         if (!response.ok) {
-
-            container.textContent =
-                data.error || "Unable to load data.";
-
+            container.textContent = data.error || "Unable to load data.";
             return;
-
         }
 
         container.innerHTML = "";
 
         if (!Array.isArray(data.history) || data.history.length === 0) {
-
             container.textContent = "No analysis records yet.";
-
             return;
-
         }
 
         data.history.forEach(record => {
-
             const card = document.createElement("div");
-
             card.className = "history-card";
 
             const result = document.createElement("h3");
-
             result.textContent = record.result;
 
             const confidence = document.createElement("p");
-
-            confidence.textContent =
-                "Confidence: " + record.confidence + "%";
+            confidence.textContent = "Confidence: " + record.confidence + "%";
 
             const date = document.createElement("p");
+            date.textContent = "Date: " + record.date;
 
-            date.textContent =
-                "Date: " + record.date;
-
-            card.append(result, confidence, date);container.appendChild(card);
-
+            card.append(result, confidence, date);
+            container.appendChild(card);
         });
 
     } catch (error) {
-
+        console.error("History error:", error);
         container.textContent = "Connection error.";
-
     }
-
 }
 
 
