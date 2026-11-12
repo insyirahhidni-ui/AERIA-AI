@@ -14,7 +14,6 @@ latest_analysis = {
     "confidence": 0
 }
 
-
 def get_db():
     conn = sqlite3.connect(DATABASE)
     conn.row_factory = sqlite3.Row
@@ -28,6 +27,16 @@ def init_db():
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 username TEXT UNIQUE NOT NULL,
                 password TEXT NOT NULL
+            )
+        """)
+        db.execute("""
+            CREATE TABLE IF NOT EXISTS analyses (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                user_id INTEGER NOT NULL,
+                result TEXT NOT NULL,
+                confidence REAL NOT NULL,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (user_id) REFERENCES users(id)
             )
         """)
 
@@ -126,16 +135,54 @@ def analysis():
 
     data = request.get_json() or {}
 
+    result = str(data.get("class", "Unknown"))
+    
+    try:
+        confidence = float(data.get("confidence", 0))
+    except (ValueError, TypeError):
+        return jsonify({"error": "Invalid confidence"}), 400
+
+    if not 0 <= confidence <= 100:
+        return jsonify({"error": "Confidence must be 0-100"}), 400
+
     latest_analysis = {
-        "class": data.get("class", "Unknown"),
-        "confidence": data.get("confidence", 0)
+        "class": result,
+        "confidence": confidence
     }
+
+    with get_db() as db:
+        db.execute("""
+            INSERT INTO analyses
+            (user_id, result, confidence)
+            VALUES (?, ?, ?)
+        """, (session["user_id"], result, confidence))
 
     return jsonify({
         "received": True,
         "result": latest_analysis
     })
+@app.route("/api/history", methods=["GET"])
+@login_required
+def history():
+    with get_db() as db:
+        records = db.execute("""
+            SELECT result, confidence, created_at
+            FROM analyses
+            WHERE user_id = ?
+            ORDER BY id DESC
+            LIMIT 50
+        """, (session["user_id"],)).fetchall()
 
+    return jsonify({
+        "history": [
+            {
+                "result": row["result"],
+                "confidence": row["confidence"],
+                "date": row["created_at"]
+            }
+            for row in records
+        ]
+    })
 
 @app.route("/api/status")
 def status():
