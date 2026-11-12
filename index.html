@@ -1,388 +1,257 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AERIA AI</title>
+$("timer").textContent = timeLeft;
 
-<style>
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: Arial, sans-serif;
-}
+    if (elapsedTime % 8 < 4) {
 
-body {
-    background: #f5f5e9;
-    color: #344b3b;
-}
+        $("breathText").textContent = "Inhale gently";
 
-header {
-    background: #dce8d5;
-    padding: 22px;
-    text-align: center;
-}
+        $("breathCircle").textContent = "Inhale";
 
-.logo {
-    font-size: 30px;
-    font-weight: bold;
-    letter-spacing: 3px;
-}
+        $("breathCircle").style.transform = "scale(1.12)";
 
-.tagline {
-    font-size: 13px;
-    margin-top: 7px;
-}
+    } else {
 
-main {
-    max-width: 650px;
-    margin: 35px auto;
-    padding: 20px;
-}
+        $("breathText").textContent = "Exhale gently";
 
-.card {
-    background: white;
-    padding: 25px;
-    border-radius: 20px;
-    margin-bottom: 20px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-}
+        $("breathCircle").textContent = "Exhale";
 
-h2 {
-    margin-bottom: 15px;
-}
+        $("breathCircle").style.transform = "scale(0.9)";
 
-input {
-    width: 100%;
-    padding: 13px;
-    margin: 8px 0;
-    border: 1px solid #ccd8c8;
-    border-radius: 10px;
-}
-
-button {
-    background: #789779;
-    color: white;
-    border: none;
-    padding: 13px 20px;
-    border-radius: 10px;
-    cursor: pointer;
-    margin-top: 10px;
-}
-
-button:hover {
-    background: #5d7c60;
-}
-
-.switch {
-    color: #66876b;
-    cursor: pointer;
-    margin-top: 15px;
-    display: block;
-}
-
-.hidden {
-    display: none;
-}
-</style>
-</head>
-
-<body>
-
-<header>
-    <div class="logo">AERIA AI</div>
-    <div class="tagline">Breathe Better. Live Better.</div>
-</header>
-
-<main>
-
-<section id="loginPage" class="card">
-    <h2>Welcome Back</h2>
-    <p>Login to your AERIA AI account.</p>
-
-    <input type="text" id="loginUsername" placeholder="Username">
-    <input type="password" id="loginPassword" placeholder="Password">
-
-    <button onclick="login()">Login</button>
-
-    <span class="switch" onclick="showRegister()">
-        Don't have an account? Register
-    </span>
-    <p id="loginMessage"></p>
-</section>
-
-<section id="registerPage" class="card hidden">
-    <h2>Create Account</h2>
-    <p>Join AERIA AI today.</p>
-
-    <input type="text" id="registerUsername" placeholder="Username">
-    <input type="password" id="registerPassword" placeholder="Password">
-
-    <button onclick="register()">Register</button>
-
-    <span class="switch" onclick="showLogin()">
-        Already have an account? Login
-    </span>
-    <p id="registerMessage"></p>
-</section>
-<section id="homePage" class="hidden">
-
-    <div class="card">
-        <h2>Hello, welcome to AERIA AI!</h2>
-        <p>Your breathing and wellness companion.</p>
-        <br>
-        <h3>🌿 Take a moment to breathe.</h3>
-        <p>Relax your mind and focus on your breathing.</p>
-    </div>
-
-    <div class="card">
-        <h2>60 Seconds Breathing</h2>
-        <p id="breathText">Ready to begin?</p>
-
-        <h1 id="timer">60</h1>
-
-        <button onclick="startBreathing()">Start</button>
-        <button onclick="resetBreathing()">Reset</button>
-    </div>
-
-    <div class="card">
-        <h2>AI Analysis</h2>
-        <p>Check your current wellness indicators.</p>
-
-        <h3 id="analysisResult">Belum dianalisis</h3>
-        <p id="confidence">Confidence: 0%</p>
-
-        <button onclick="getAnalysis()">View Analysis</button>
-
-        <p style="margin-top:15px;font-size:12px;">
-            Disclaimer: AI results are preliminary screening
-            and precautionary indicators only. They are not
-            a medical diagnosis. Please consult a doctor or
-            qualified healthcare professional for further
-            assessment and information.
-        </p>
-    </div>
-    <div class="card">
-        <h2>📊 My Data</h2>
-
-        <p>Your previous AI analysis records.</p>
-
-        <br>
-
-        <h3>Analysis History</h3>
-
-        <div id="historyData">
-            <p>No analysis records yet.</p>
-        </div>
-
-        <button onclick="getHistory()">
-            Refresh Data
-        </button>
-    </div>
-
-    <div class="card">
-        <h2>My Account</h2>
-        <p id="welcomeUser"></p>
-        <button onclick="logout()">Log Out</button>
-    </div>
-
-</section>
-<script>
-
-function showRegister() {
-    document.getElementById("loginPage").classList.add("hidden");
-    document.getElementById("registerPage").classList.remove("hidden");
-}
-
-function showLogin() {
-    document.getElementById("registerPage").classList.add("hidden");
-    document.getElementById("loginPage").classList.remove("hidden");
-}
-
-async function register() {
-    const username = document.getElementById("registerUsername").value;
-    const password = document.getElementById("registerPassword").value;
-
-    try {
-        const response = await fetch("/api/register", {
-            method: "POST",
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({username, password})
-        });
-
-        const data = await response.json();
-        document.getElementById("registerMessage").textContent =
-            data.message || data.error;
-
-        if (response.ok) showLogin();
-
-    } catch (error) {
-        document.getElementById("registerMessage").textContent =
-            "Connection error. Please try again.";
     }
+
 }
-
-async function login() {
-    const username = document.getElementById("loginUsername").value;
-    const password = document.getElementById("loginPassword").value;
-
-    try {
-        const response = await fetch("/api/login", {
-            method: "POST",
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({username, password})
-        });
-
-        const data = await response.json();
-
-        if (response.ok) {
-            showHome(data.username);
-        } else {
-            document.getElementById("loginMessage").textContent =
-                data.error;
-        }
-
-    } catch (error) {
-        document.getElementById("loginMessage").textContent =
-            "Connection error. Please try again.";
-    }
-}
-
-function showHome(username) {
-    document.getElementById("loginPage").classList.add("hidden");
-    document.getElementById("registerPage").classList.add("hidden");
-    document.getElementById("homePage").classList.remove("hidden");
-    document.getElementById("welcomeUser").textContent =
-        "Welcome, " + username + "!";
-    getHistory()
-}
-
-async function logout() {
-    await fetch("/api/logout", {method: "POST"});
-    location.reload();
-}
-
-async function checkLogin() {
-    try {
-        const response = await fetch("/api/me");
-        const data = await response.json();
-
-        if (data.logged_in) {
-            showHome(data.username);
-        }
-    } catch (error) {
-        console.log("Login check failed");
-    }
-}
-
-let timeLeft = 60;
-let timerInterval = null;
 
 function startBreathing() {
+
     if (timerInterval !== null) return;
 
+    if (timeLeft <= 0) {
+        resetBreathing();
+    }
+
     timerInterval = setInterval(function() {
+
         timeLeft--;
-
-        document.getElementById("timer").textContent = timeLeft;
-
-        if (timeLeft > 0 && timeLeft <= 3) {
-            document.getElementById("breathText").textContent = "Exhale";
-        } else if (timeLeft > 3) {
-            document.getElementById("breathText").textContent = "Inhale";
-        }
+        elapsedTime++;
 
         if (timeLeft <= 0) {
+
             clearInterval(timerInterval);
             timerInterval = null;
-            document.getElementById("breathText").textContent =
-                "Session completed!";
+
+            $("timer").textContent = "0";
+            $("breathText").textContent =
+                "Session completed! 🌷";
+
+            $("breathCircle").textContent = "Done";
+            $("breathCircle").style.transform = "scale(1)";
+
+            return;
+
         }
+
+        updateBreathing();
+
     }, 1000);
+
 }
 
 function resetBreathing() {
-    clearInterval(timerInterval);
-    timerInterval = null;
-    timeLeft = 60;
 
-    document.getElementById("timer").textContent = "60";
-    document.getElementById("breathText").textContent = "Ready to begin?";
+    clearInterval(timerInterval);
+
+    timerInterval = null;
+
+    timeLeft = 60;
+    elapsedTime = 0;
+
+    $("timer").textContent = "60";
+    $("breathText").textContent = "Ready to begin?";
+    $("breathCircle").textContent = "Ready";
+    $("breathCircle").style.transform = "scale(1)";
+
 }
+
+
+/* AI ANALYSIS */
 
 async function getAnalysis() {
+
+    const resultBox = $("analysisResult");
+    const confidenceBox = $("confidence");
+    const messageBox = $("analysisMessage");
+
+    resultBox.textContent = "Loading analysis...";
+    confidenceBox.textContent = "";
+    messageBox.textContent = "Connecting to AERIA AI...";
+
+    $("viewAnalysisButton").disabled = true;
+
     try {
-        const response = await fetch("/api/analysis");
-        const data = await response.json();
+
+        const {response, data} = await apiRequest(
+            "/api/analysis?time=" + Date.now()
+        );
 
         if (!response.ok) {
-            document.getElementById("analysisResult").textContent =
-                data.error || "Unable to get analysis";
+
+            resultBox.textContent =
+                data.error || "Unable to load analysis.";
+
+            messageBox.textContent =
+                "Please check your login and connection.";
+
             return;
+
         }
 
-        document.getElementById("analysisResult").textContent =
-            data.class;
+        resultBox.textContent =
+            data.class || "No analysis available.";
 
-        document.getElementById("confidence").textContent =
-            "Confidence: " + data.confidence + "%";} catch (error) {
-        document.getElementById("analysisResult").textContent =
-            "Connection error";
+        confidenceBox.textContent =
+            "Confidence: " + (data.confidence ?? 0) + "%";
+
+        if (data.class === "Belum dianalisis") {
+
+            messageBox.textContent =
+                "No AI analysis has been saved yet. Waiting for PictoBlox AI data.";
+
+        } else {
+
+            messageBox.textContent =
+                "Latest saved analysis retrieved successfully.";
+
+        }
+
+    } catch (error) {
+
+        console.error("Analysis error:", error);
+
+        resultBox.textContent = "Connection error.";
+
+        messageBox.textContent =
+            "Unable to connect to the analysis service.";
+
+    } finally {
+
+        $("viewAnalysisButton").disabled = false;
+
     }
+
 }
-    async function getHistory() {
-    const container = document.getElementById("historyData");
+
+
+/* ANALYSIS HISTORY */
+
+async function getHistory() {
+
+    const container = $("historyData");
 
     container.textContent = "Loading data...";
 
     try {
-        const response = await fetch("/api/history");
-        const data = await response.json();
+
+        const {response, data} = await apiRequest("/api/history");
 
         if (!response.ok) {
-            container.textContent = data.error || "Unable to load data.";
+
+            container.textContent =
+                data.error || "Unable to load data.";
+
             return;
+
         }
 
         container.innerHTML = "";
 
-        if (data.history.length === 0) {
+        if (!Array.isArray(data.history) || data.history.length === 0) {
+
             container.textContent = "No analysis records yet.";
+
             return;
+
         }
 
         data.history.forEach(record => {
+
             const card = document.createElement("div");
 
-            card.style.padding = "15px";
-            card.style.marginTop = "12px";
-            card.style.background = "#f5f5e9";
-            card.style.borderRadius = "12px";
+            card.className = "history-card";
 
             const result = document.createElement("h3");
+
             result.textContent = record.result;
 
             const confidence = document.createElement("p");
+
             confidence.textContent =
                 "Confidence: " + record.confidence + "%";
 
             const date = document.createElement("p");
-            date.textContent = "Date: " + record.date;
 
-            card.append(result, confidence, date);
-            container.appendChild(card);
+            date.textContent =
+                "Date: " + record.date;
+
+            card.append(result, confidence, date);container.appendChild(card);
+
         });
 
     } catch (error) {
+
         container.textContent = "Connection error.";
+
     }
+
 }
+
+
+/* BUTTON EVENT LISTENERS */
+
+$("goRegister").addEventListener("click", showRegister);
+
+$("goLogin").addEventListener("click", showLogin);
+
+$("loginButton").addEventListener("click", login);
+
+$("registerButton").addEventListener("click", register);
+
+$("logoutButton").addEventListener("click", logout);
+
+$("startBreathing").addEventListener("click", startBreathing);
+
+$("resetBreathing").addEventListener("click", resetBreathing);
+
+$("viewAnalysisButton").addEventListener("click", getAnalysis);
+
+$("refreshHistory").addEventListener("click", getHistory);
+
+
+document.querySelectorAll("nav button[data-view]").forEach(button => {
+
+    button.addEventListener("click", function() {
+
+        openView(this.dataset.view);
+
+    });
+
+});
+
+
+document.querySelectorAll("[data-open-view]").forEach(button => {
+
+    button.addEventListener("click", function() {
+
+        openView(this.dataset.openView);
+
+    });
+
+});
+
+
+/* START APPLICATION */
 
 checkLogin();
 
 </script>
 
-</main>
 </body>
 </html>
