@@ -321,7 +321,7 @@ def status():
 
 # RUN APPLICATION
 
-if name == "main":
+if __name__ == "__main__":
 
     port = int(os.environ.get("PORT", 5000))
 
@@ -329,5 +329,3 @@ if name == "main":
         host="0.0.0.0",
         port=port
     )
-
-    if request.method == "GET":
