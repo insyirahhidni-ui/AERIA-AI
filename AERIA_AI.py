@@ -5,7 +5,7 @@ import os
 from functools import wraps
 from contextlib import contextmanager
 
-app = Flask(name)
+app = Flask(__name__)
 
 app.secret_key = os.environ.get(
     "SECRET_KEY",
