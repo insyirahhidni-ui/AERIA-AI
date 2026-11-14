@@ -262,6 +262,60 @@ def analysis():
         }
     })
 
+# PICTOBLOX DEVICE ANALYSIS
+
+@app.route("/api/device-analysis", methods=["POST"])
+def device_analysis():
+
+    data = request.get_json(silent=True) or {}
+
+    api_key = os.environ.get("AERIA_DEVICE_KEY")
+    username = os.environ.get("AERIA_DEVICE_USERNAME")
+
+    if not api_key or not username:
+        return jsonify({"error": "Device not configured"}), 500
+
+    if data.get("api_key") != api_key:
+        return jsonify({"error": "Unauthorized device"}), 401
+
+    result = str(data.get("class", "")).strip()
+
+    if result not in ["penat", "tidak penat"]:
+        return jsonify({"error": "Invalid class"}), 400
+
+    try:
+        confidence = float(data.get("confidence", 0))
+    except (ValueError, TypeError):
+        return jsonify({"error": "Invalid confidence"}), 400
+
+    if not 0 <= confidence <= 100:
+        return jsonify({"error": "Invalid confidence"}), 400
+
+    with get_db() as db:
+
+        user = db.execute(
+            "SELECT id FROM users WHERE username = ?",
+            (username,)
+        ).fetchone()
+
+        if user is None:
+            return jsonify({"error": "User not found"}), 404
+
+        db.execute(
+            """
+            INSERT INTO analyses
+            (user_id, result, confidence)
+            VALUES (?, ?, ?)
+            """,
+            (user["id"], result, confidence)
+        )
+
+    return jsonify({
+        "received": True,
+        "class": result,
+        "confidence": confidence
+    }), 200
+
 # ANALYSIS HISTORY
 
 @app.route("/api/history", methods=["GET"])
