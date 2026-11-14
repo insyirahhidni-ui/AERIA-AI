@@ -172,6 +172,42 @@
             .app-nav { display: grid; grid-template-columns: repeat(2, 1fr); }
             .app-nav .btn { width: 100%; }
         }
+        .chart-card {
+    margin-top: 20px;
+    padding: 18px;
+    border-radius: 16px;
+    background: #f3f7ee;
+}
+
+.chart-card h3 {
+    color: #526b45;
+    margin-bottom: 20px;
+}
+
+.chart-track {
+    width: 100%;
+    height: 18px;
+    background: #dfe8d8;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.chart-bar {
+    width: 0%;
+    height: 100%;
+    border-radius: 20px;
+    transition: width 0.5s ease;
+    background: #829b70;
+}
+
+#takPenatBar {
+    background: #b5c99a;
+}
+
+.chart-card p {
+    margin: 10px 0;
+    color: #526b45;
+}
     </style>
 </head>
 <body>
@@ -275,6 +311,23 @@
                 <div class="card">
                     <h2 class="view-title">My Data </h2>
                     <p class="muted">Your latest saved analysis records will appear here.</p>
+                    <div class="chart-card">
+    <h3>AI Analysis Overview</h3>
+
+    <p>Penat</p>
+    <div class="chart-track">
+        <div id="penatBar" class="chart-bar"></div>
+    </div>
+    <p id="penatCount">0 records</p>
+
+    <p>Tak Penat</p>
+    <div class="chart-track">
+        <div id="takPenatBar" class="chart-bar"></div>
+    </div>
+    <p id="takPenatCount">0 records</p>
+
+    <p id="totalCount">Total analyses: 0</p>
+</div>
                     <div id="historyData" aria-live="polite">
                         <p class="muted">No analysis records loaded yet.</p>
                     </div>
@@ -317,10 +370,10 @@
             $("appPage").classList.remove("hidden");
             $("welcomeTitle").textContent = "Welcome, " + username + "!";
             openView("homeView");
-            getHistory();
-        }
+       
 
-        function openView(viewId) {
+        function op     getHistory();
+        }enView(viewId) {
             document.querySelectorAll(".app-view").forEach((view) => {
                 view.classList.toggle("hidden", view.id !== viewId);
             });
@@ -505,6 +558,25 @@
                     container.textContent = "No analysis records yet.";
                     return;
                 }
+                const penat = data.history.filter(
+    record => record.result.toLowerCase() === "penat"
+).length;
+
+const takPenat = data.history.filter(
+    record => record.result.toLowerCase() === "tak penat"
+).length;
+
+const total = penat + takPenat;
+
+$("penatCount").textContent = penat + " records";
+$("takPenatCount").textContent = takPenat + " records";
+$("totalCount").textContent = "Total analyses: " + total;
+
+$("penatBar").style.width =
+    (total ? (penat / total) * 100 : 0) + "%";
+
+$("takPenatBar").style.width =
+    (total ? (takPenat / total) * 100 : 0) + "%";
                 data.history.forEach((record) => {
                     const card = document.createElement("div");
                     card.className = "history-card";
