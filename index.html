@@ -840,7 +840,89 @@
 
             }
 
+        }// LOGOUT
+        async function logout() {
+            try {
+                await apiRequest("/api/logout", {
+                    method: "POST"
+                });
+            } catch (error) {
+                console.error("Logout error:", error);
+            }
+
+            showLogin();
+            $("loginUsername").value = "";
+            $("loginPassword").value = "";
+            $("loginMessage").textContent = "You have logged out.";
         }
 
 
-        // LOGOUT
+        // CHECK LOGIN SESSION
+        async function checkSession() {
+            try {
+                const { response, data } = await apiRequest(
+                    "/api/me"
+                );
+
+                if (response.ok && data.username) {
+                    showHome(data.username);
+                } else {
+                    showLogin();
+                }
+
+            } catch (error) {
+                console.error("Session error:", error);
+                showLogin();
+            }
+        }
+
+
+        // BUTTON EVENTS
+        $("loginButton").addEventListener("click", login);
+
+        $("registerButton").addEventListener("click", register);
+
+        $("goRegister").addEventListener("click", showRegister);
+
+        $("goLogin").addEventListener("click", showLogin);
+
+        $("logoutButton").addEventListener("click", logout);
+
+
+        // NAVIGATION EVENTS
+        document.querySelectorAll("[data-view]").forEach((button) => {
+            button.addEventListener("click", () => {
+                openView(button.dataset.view);
+            });
+        });
+
+        document.querySelectorAll("[data-open-view]").forEach((button) => {
+            button.addEventListener("click", () => {
+                openView(button.dataset.openView);
+            });
+        });
+
+
+        // ENTER KEY LOGIN
+        $("loginPassword").addEventListener("keydown", (event) => {
+            if (event.key === "Enter") {
+                login();
+            }
+        });
+
+
+        // ENTER KEY REGISTER
+        $("registerPassword").addEventListener("keydown", (event) => {
+            if (event.key === "Enter") {
+                register();
+            }
+        });
+
+
+        // STARTUP
+        document.addEventListener("DOMContentLoaded", checkSession);
+
+    </script>
+
+</body>
+</html>
