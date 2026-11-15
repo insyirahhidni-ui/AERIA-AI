@@ -219,7 +219,7 @@ def analysis():
 
 @app.route("/api/device-analysis", methods=["POST"])
 def device_analysis():
-    data = request.get_json(silent=True) or {}
+    data = request.get_json(force=True, silent=True) or {}
 
     api_key = os.environ.get("AERIA_DEVICE_KEY")
     username = os.environ.get("AERIA_DEVICE_USERNAME")
