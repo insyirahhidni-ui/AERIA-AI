@@ -229,8 +229,8 @@ def device_analysis():
             "error": "Device not configured"
         }), 500
 
-    if not data.get("api_key"):
-    return jsonify({"error": "API key missing"}), 401
+    if data.get("api_key"):
+        return jsonify({"error": "API key missing"}), 401
 
 if data.get("api_key") != api_key:
     return jsonify({"error": "API key mismatch"}), 401
