@@ -258,9 +258,9 @@ def device_analysis():
             (username,)
         ).fetchone()
 
-        if user is None:
-            return jsonify({"error": "Device username not found: " + username}), 404
-
+    if user is None:
+        return jsonify({"error": "User not found"}), 404
+    
         db.execute("""
             INSERT INTO analyses (user_id, result, confidence)
             VALUES (?, ?, ?)
