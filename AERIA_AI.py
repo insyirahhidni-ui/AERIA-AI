@@ -28,7 +28,7 @@
 
         .topbar {
             background: #dcebdc;
-            padding:22px;
+            padding: 22px;
             text-align: center;
         }
 
