@@ -170,7 +170,7 @@ def analysis():
                 LIMIT 1
             """, (user_id,)).fetchone()
             
-            if record is None:
+        if record is None:
             return jsonify({
                 "class": "Belum dianalisis",
                 "confidence": 0
