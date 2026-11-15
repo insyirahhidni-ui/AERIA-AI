@@ -234,13 +234,13 @@ def device_analysis():
 
 if data.get("api_key") != api_key:
         return jsonify({"error": "API key mismatch"}), 401
-
+    
     result = str(data.get("class", "")).strip()
 
-    if result == "tidak penat":
-        result = "tak penat"
+ if result == "tidak penat":
+    result = "tak penat"
 
-    if result not in ["penat", "tak penat"]:
+ if result not in ["penat", "tak penat"]:
         return jsonify({
             "error": "Invalid class"
         }), 400
