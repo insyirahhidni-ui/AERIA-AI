@@ -176,8 +176,9 @@ def logout():
 @app.route("/api/analysis", methods=["GET", "POST"])
 @login_required
 def analysis():
-    user_id = session["user_id"]if request.method == "GET":
+    user_id = session["user_id"]
     
+    if request.method == "GET":
         with get_db() as db:
             record = db.execute(
                 """
