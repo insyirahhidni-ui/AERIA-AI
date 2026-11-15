@@ -219,8 +219,7 @@ def analysis():
 
 @app.route("/api/device-analysis", methods=["POST"])
 def device_analysis():
-    return jsonify({"test": "DEVICE ROUTE REACHED"}), 200
-    data = request.get_json(force=True, silent=True) or {}
+    data = request.get_json(silent=True) or {}
 
     api_key = os.environ.get("AERIA_DEVICE_KEY")
     username = os.environ.get("AERIA_DEVICE_USERNAME")
@@ -234,7 +233,7 @@ def device_analysis():
     if data.get("api_key") != api_key:
         return jsonify({"error": "API key mismatch"}), 401
 
-    result = str(data.get("class", "")).strip()
+    result = str(data.get("class", "")).strip().lower()
 
     if result == "tidak penat":
         result = "tak penat"
@@ -248,7 +247,7 @@ def device_analysis():
         return jsonify({"error": "Invalid confidence"}), 400
 
     if 0 <= confidence <= 1:
-        confidence = confidence * 100
+        confidence *= 100
 
     if not 0 <= confidence <= 100:
         return jsonify({"error": "Invalid confidence"}), 400
@@ -259,54 +258,18 @@ def device_analysis():
             (username,)
         ).fetchone()
 
-    if user is None:
-        return jsonify({"error": "User not found"}), 404
-    
+        if user is None:
+            return jsonify({"error": "User not found"}), 404
+
         db.execute("""
             INSERT INTO analyses (user_id, result, confidence)
             VALUES (?, ?, ?)
         """, (user["id"], result, confidence))
+
+        db.commit()
 
     return jsonify({
         "received": True,
         "class": result,
         "confidence": confidence
     }), 200
-    
-@app.route("/api/history", methods=["GET"])
-@login_required
-def history():
-    user_id = session["user_id"]
-
-    with get_db() as db:
-        records = db.execute("""
-            SELECT result, confidence, created_at
-            FROM analyses
-            WHERE user_id = ?
-            ORDER BY id DESC
-            LIMIT 50
-        """, (user_id,)).fetchall()
-
-    return jsonify({
-        "history": [
-            {
-                "result": row["result"],
-                "confidence": row["confidence"],
-                "date": row["created_at"]
-            }
-            for row in records
-        ]
-    })
-
-
-@app.route("/api/status")
-def status():
-    return jsonify({
-        "app": "AERIA AI",
-        "status": "online"
-    })
-
-
-if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 5000))
-    app.run(host="0.0.0.0", port=port)
