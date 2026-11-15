@@ -219,6 +219,7 @@ def analysis():
 
 @app.route("/api/device-analysis", methods=["POST"])
 def device_analysis():
+    return jsonify({"test": "DEVICE ROUTE REACHED"}), 200
     data = request.get_json(force=True, silent=True) or {}
 
     api_key = os.environ.get("AERIA_DEVICE_KEY")
