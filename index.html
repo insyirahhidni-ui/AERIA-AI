@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#dcebdc">
     <title>AERIA AI</title>
+
     <style>
         :root {
             --matcha: #6f9277;
@@ -19,26 +20,42 @@
             --shadow: 0 8px 25px rgba(55, 82, 61, 0.10);
         }
 
-        * { box-sizing: border-box; }
+        * {
+            box-sizing: border-box;
+        }
 
         body {
             margin: 0;
             min-height: 100vh;
-            background: linear-gradient(145deg, #f7f7ed, #edf3e9 55%, #faeef0);
+            background: linear-gradient(
+                145deg,
+                #f7f7ed,
+                #edf3e9 55%,
+                #faeef0
+            );
             color: var(--ink);
             font-family: Arial, Helvetica, sans-serif;
         }
 
-        button, input { font: inherit; }
-        button { cursor: pointer; }
-        .hidden { display: none !important; }
+        button, input {
+            font: inherit;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        .hidden {
+            display: none !important;
+        }
 
         .topbar {
             padding: 22px 16px;
             text-align: center;
             background: rgba(220, 235, 220, 0.92);
-            border-bottom: 1px solid rgba(71, 102, 79, 0.12);⁴
+            border-bottom: 1px solid rgba(71, 102, 79, 0.12);
         }
+
         .brand {
             margin: 0;
             color: var(--matcha-dark);
@@ -46,9 +63,19 @@
             letter-spacing: 4px;
             font-weight: 800;
         }
-        .tagline { margin: 7px 0 0; color: var(--muted); font-size: 13px; }
 
-        .shell { width: min(920px, 100%); margin: 0 auto; padding: 22px 16px 48px; }
+        .tagline {
+            margin: 7px 0 0;
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .shell {
+            width: min(920px, 100%);
+            margin: 0 auto;
+            padding: 22px 16px 48px;
+        }
+
         .card {
             background: rgba(255,255,255,0.94);
             border: 1px solid rgba(111,146,119,0.14);
@@ -57,13 +84,40 @@
             margin: 0 0 18px;
             box-shadow: var(--shadow);
         }
-        .auth-card { width: min(440px, 100%); margin: 35px auto; }
-        h2 { margin: 0 0 10px; color: var(--matcha-dark); }
-        h3 { color: var(--matcha-dark); }
-        p { line-height: 1.55; }
-        .muted { color: var(--muted); }
-        .small { font-size: 12px; }
-        .field-label { display: block; margin: 14px 0 6px; font-size: 13px; font-weight: 700; }
+
+        .auth-card {
+            width: min(440px, 100%);
+            margin: 35px auto;
+        }
+
+        h2 {
+            margin: 0 0 10px;
+            color: var(--matcha-dark);
+        }
+
+        h3 {
+            color: var(--matcha-dark);
+        }
+
+        p {
+            line-height: 1.55;
+        }
+
+        .muted {
+            color: var(--muted);
+        }
+
+        .small {
+            font-size: 12px;
+        }
+
+        .field-label {
+            display: block;
+            margin: 14px 0 6px;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
         input {
             width: 100%;
             padding: 13px 14px;
@@ -73,7 +127,12 @@
             color: var(--ink);
             outline: none;
         }
-        input:focus { border-color: var(--matcha); box-shadow: 0 0 0 3px rgba(111,146,119,.14); }
+
+        input:focus {
+            border-color: var(--matcha);
+            box-shadow: 0 0 0 3px rgba(111,146,119,.14);
+        }
+
         .btn {
             border: 0;
             border-radius: 12px;
@@ -84,10 +143,27 @@
             font-weight: 700;
             transition: transform .15s ease, background .15s ease;
         }
-        .btn:hover { background: var(--matcha-dark); transform: translateY(-1px); }
-        .btn:disabled { opacity: .6; cursor: wait; transform: none; }
-        .btn-soft { background: var(--pink); color: #754b54; }
-        .btn-soft:hover { background: #edcbd2; }
+
+        .btn:hover {
+            background: var(--matcha-dark);
+            transform: translateY(-1px);
+        }
+
+        .btn:disabled {
+            opacity: .6;
+            cursor: wait;
+            transform: none;
+        }
+
+        .btn-soft {
+            background: var(--pink);
+            color: #754b54;
+        }
+
+        .btn-soft:hover {
+            background: #edcbd2;
+        }
+
         .link-btn {
             display: inline-block;
             border: 0;
@@ -96,8 +172,12 @@
             text-decoration: underline;
             padding: 8px 0;
             margin-top: 10px;
+        }.message {
+            min-height: 20px;
+            margin: 12px 0 0;
+            color: var(--pink-dark);
+            font-size: 13px;
         }
-        .message { min-height: 20px; margin: 12px 0 0; color: var(--pink-dark); font-size: 13px; }
 
         .app-nav {
             display: flex;
@@ -106,23 +186,51 @@
             justify-content: center;
             margin: 0 0 20px;
         }
-        .app-nav .btn { margin: 0; }
-        .welcome {
-            background: linear-gradient(120deg, #e3eee0, #f9e9ec);padding: 25px;
-            margin-bottom: 18px;
+
+        .app-nav .btn {
+            margin: 0;
         }
-        .welcome h2 { font-size: 25px; }
-        .flower { font-size: 26px; }
-        .view-title { margin: 0 0 15px; }
-        .feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 13px; }
+
+        .welcome {
+            background: linear-gradient(120deg, #e3eee0, #f9e9ec);
+            padding: 25px;
+            margin-bottom: 18px;
+            border-radius: 22px;
+        }
+
+        .welcome h2 {
+            font-size: 25px;
+        }
+
+        .flower {
+            font-size: 26px;
+        }
+
+        .view-title {
+            margin: 0 0 15px;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+            gap: 13px;
+        }
+
         .feature {
             border-radius: 17px;
             padding: 17px;
             background: #f4f7f0;
             border: 1px solid #e2ebdf;
         }
-        .feature h3 { margin: 0 0 7px; }
-        .breath-panel { text-align: center; }
+
+        .feature h3 {
+            margin: 0 0 7px;
+        }
+
+        .breath-panel {
+            text-align: center;
+        }
+
         .breath-circle {
             width: 175px;
             height: 175px;
@@ -131,14 +239,26 @@
             justify-content: center;
             align-items: center;
             border-radius: 50%;
-            background: radial-gradient(circle at 35% 30%, #f8e4e8, #d8e9d7 75%);
+            background: radial-gradient(
+                circle at 35% 30%,
+                #f8e4e8,
+                #d8e9d7 75%
+            );
             color: var(--matcha-dark);
             font-size: 22px;
             font-weight: 800;
-            box-shadow: inset 0 0 0 9px rgba(255,255,255,.35), 0 8px 24px rgba(71,102,79,.12);
+            box-shadow:
+                inset 0 0 0 9px rgba(255,255,255,.35),
+                0 8px 24px rgba(71,102,79,.12);
             transition: transform 1s ease;
         }
-        .timer { font-size: 42px; margin: 8px 0; color: var(--matcha-dark); }
+
+        .timer {
+            font-size: 42px;
+            margin: 8px 0;
+            color: var(--matcha-dark);
+        }
+
         .result-box {
             border-radius: 16px;
             padding: 17px;
@@ -146,6 +266,7 @@
             background: #f3f7f0;
             border: 1px solid #e2ebdf;
         }
+
         .disclaimer {
             margin-top: 18px;
             padding: 13px;
@@ -156,6 +277,7 @@
             font-size: 12px;
             line-height: 1.55;
         }
+
         .history-card {
             background: #f7f8f2;
             border: 1px solid #e3e9df;
@@ -163,457 +285,562 @@
             padding: 14px;
             margin-top: 10px;
         }
-        .history-card h3 { margin: 0 0 5px; }
-        .history-card p { margin: 4px 0; font-size: 13px; }
-        footer { text-align: center; color: var(--muted); font-size: 12px; padding: 12px; }
+
+        .history-card h3 {
+            margin: 0 0 5px;
+        }
+
+        .history-card p {
+            margin: 4px 0;
+            font-size: 13px;
+        }
+
+        footer {
+            text-align: center;
+            color: var(--muted);
+            font-size: 12px;
+            padding: 12px;
+        }
 
         @media (max-width: 520px) {
-            .card { padding: 19px; }
-            .app-nav { display: grid; grid-template-columns: repeat(2, 1fr); }
-            .app-nav .btn { width: 100%; }
+            .card {
+                padding: 19px;
+            }
+
+            .app-nav {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .app-nav .btn {
+                width: 100%;
+            }
         }
-        .chart-card {
-    margin-top: 20px;
-    padding: 18px;
-    border-radius: 16px;
-    background: #f3f7ee;
-}
-
-.chart-card h3 {
-    color: #526b45;
-    margin-bottom: 20px;
-}
-
-.chart-track {
-    width: 100%;
-    height: 18px;
-    background: #dfe8d8;
-    border-radius: 20px;
-    overflow: hidden;
-}
-
-.chart-bar {
-    width: 0%;
-    height: 100%;
-    border-radius: 20px;
-    transition: width 0.5s ease;
-    background: #829b70;
-}
-
-#takPenatBar {
-    background: #b5c99a;
-}
-
-.chart-card p {
-    margin: 10px 0;
-    color: #526b45;
-}
     </style>
 </head>
+
 <body>
+
     <header class="topbar">
         <h1 class="brand">AERIA AI</h1>
-        <p class="tagline">Breathe Better. Live Better. </p>
+        <p class="tagline">Breathe Better. Live Better.</p>
     </header>
 
     <main class="shell">
+
         <!-- LOGIN -->
         <section id="loginPage" class="card auth-card">
-            <h2>Welcome back </h2>
-            <p class="muted">Log in to continue to your AERIA AI space.</p>
-            <label class="field-label" for="loginUsername">Username</label>
-            <input id="loginUsername" type="text" autocomplete="username" placeholder="Enter your username">
-            <label class="field-label" for="loginPassword">Password</label>
-            <input id="loginPassword" type="password" autocomplete="current-password" placeholder="Enter your password">
-            <button id="loginButton" class="btn" type="button">Log in</button>
+
+            <h2>Welcome back</h2>
+
+            <p class="muted">
+                Log in to continue to your AERIA AI space.
+            </p>
+
+            <label class="field-label" for="loginUsername">
+                Username
+            </label>
+
+            <input
+                id="loginUsername"
+                type="text"
+                autocomplete="username"
+                placeholder="Enter your username"
+            ><label class="field-label" for="loginPassword">
+                Password
+            </label>
+
+            <input
+                id="loginPassword"
+                type="password"
+                autocomplete="current-password"
+                placeholder="Enter your password"
+            >
+
+            <button id="loginButton" class="btn" type="button">
+                Log in
+            </button>
+
             <p id="loginMessage" class="message" aria-live="polite"></p>
-            <button id="goRegister" class="link-btn" type="button">Create a new account</button>
+
+            <button id="goRegister" class="link-btn" type="button">
+                Create a new account
+            </button>
+
         </section>
+
 
         <!-- REGISTER -->
         <section id="registerPage" class="card auth-card hidden">
-            <h2>Create your account </h2>
-            <p class="muted">Choose a username and password for your AERIA AI account.</p>
-            <label class="field-label" for="registerUsername">Username</label>
-            <input id="registerUsername" type="text" autocomplete="username" placeholder="20 characters">
-            <label class="field-label" for="registerPassword">Password</label><input id="registerPassword" type="password" autocomplete="new-password" placeholder="At least 8 characters">
-            <button id="registerButton" class="btn" type="button">Register</button>
+
+            <h2>Create your account</h2>
+
+            <p class="muted">
+                Choose a username and password for your AERIA AI account.
+            </p>
+
+            <label class="field-label" for="registerUsername">
+                Username
+            </label>
+
+            <input
+                id="registerUsername"
+                type="text"
+                autocomplete="username"
+                placeholder="Enter your username"
+            >
+
+            <label class="field-label" for="registerPassword">
+                Password
+            </label>
+
+            <input
+                id="registerPassword"
+                type="password"
+                autocomplete="new-password"
+                placeholder="At least 8 characters"
+            >
+
+            <button id="registerButton" class="btn" type="button">
+                Register
+            </button>
+
             <p id="registerMessage" class="message" aria-live="polite"></p>
-            <button id="goLogin" class="link-btn" type="button">Already have an account? Log in</button>
+
+            <button id="goLogin" class="link-btn" type="button">
+                Already have an account? Log in
+            </button>
+
         </section>
+
 
         <!-- APP -->
         <section id="appPage" class="hidden">
+
             <nav class="app-nav" aria-label="Main navigation">
-                <button class="btn" type="button" data-view="homeView">Home</button>
-                <button class="btn" type="button" data-view="breathingView">60 sec breathing</button>
-                <button class="btn" type="button" data-view="analysisView">AI analysis</button>
-                <button class="btn" type="button" data-view="dataView">My data</button>
-                <button class="btn btn-soft" type="button" id="logoutButton">Log out</button>
+
+                <button class="btn" type="button" data-view="homeView">
+                    Home
+                </button>
+
+                <button class="btn" type="button" data-view="breathingView">
+                    60 sec breathing
+                </button>
+
+                <button class="btn" type="button" data-view="analysisView">
+                    AI analysis
+                </button>
+
+                <button class="btn" type="button" data-view="dataView">
+                    My data
+                </button>
+
+                <button class="btn btn-soft" type="button" id="logoutButton">
+                    Log out
+                </button>
+
             </nav>
 
+
+            <!-- HOME -->
             <section id="homeView" class="app-view">
+
                 <div class="welcome">
-                    <div class="flower"></div>
-                    <h2 id="welcomeTitle">Welcome to AERIA AI!</h2>
-                    <p>Your gentle space to pause, practise mindful breathing and view your saved wellness indicators.</p>
+
+                    <div class="flower">🌷 🍓 🌿</div>
+
+                    <h2 id="welcomeTitle">
+                        Welcome to AERIA AI!
+                    </h2>
+
+                    <p>
+                        Your gentle space to pause, practise mindful
+                        breathing and view your saved wellness indicators.
+                    </p>
+
                 </div>
+
+
                 <div class="card">
-                    <h2 class="view-title">Your AERIA space</h2>
+
+                    <h2 class="view-title">
+                        Your AERIA space
+                    </h2>
+
                     <div class="feature-grid">
+
                         <div class="feature">
-                            <h3> Breathing</h3>
-                            <p class="muted">A guided 60-second breathing activity.</p>
-                            <button class="btn" type="button" data-open-view="breathingView">Open</button>
+
+                            <h3>Breathing</h3>
+
+                            <p class="muted">
+                                A guided 60-second breathing activity.
+                            </p>
+
+                            <button
+                                class="btn"
+                                type="button"
+                                data-open-view="breathingView"
+                            >
+                                Open
+                            </button>
+
                         </div>
+
+
                         <div class="feature">
-                            <h3>AI analysis</h3>
-                            <p class="muted">View the latest result received from the AI system.</p>
-                            <button class="btn" type="button" data-open-view="analysisView">Open</button>
+
+                            <h3>AI analysis</h3><p class="muted">
+                                View the latest result received from the AI system.
+                            </p>
+
+                            <button
+                                class="btn"
+                                type="button"
+                                data-open-view="analysisView"
+                            >
+                                Open
+                            </button>
+
                         </div>
+
+
                         <div class="feature">
+
                             <h3>My data</h3>
-                            <p class="muted">Review your previously saved analysis records.</p>
-                            <button class="btn" type="button" data-open-view="dataView">Open</button>
+
+                            <p class="muted">
+                                Review your previously saved analysis records.
+                            </p>
+
+                            <button
+                                class="btn"
+                                type="button"
+                                data-open-view="dataView"
+                            >
+                                Open
+                            </button>
+
                         </div>
+
                     </div>
                 </div>
+
             </section>
 
+
+            <!-- BREATHING -->
             <section id="breathingView" class="app-view hidden">
+
                 <div class="card breath-panel">
-                    <h2 class="view-title">60 seconds breathing </h2>
-                    <p id="breathText" class="muted">Ready to begin?</p>
-                    <div id="breathCircle" class="breath-circle">Ready</div>
-                    <div id="timer" class="timer">60</div>
-                    <p class="muted small">Follow a comfortable, natural pace. Do not force or hold your breath.</p>
-                    <button id="startBreathing" class="btn" type="button">Start</button>
-                    <button id="resetBreathing" class="btn btn-soft" type="button">Reset</button>
+
+                    <h2 class="view-title">
+                        60 seconds breathing
+                    </h2>
+
+                    <p id="breathText" class="muted">
+                        Ready to begin?
+                    </p>
+
+                    <div id="breathCircle" class="breath-circle">
+                        Ready
+                    </div>
+
+                    <div id="timer" class="timer">
+                        60
+                    </div>
+
+                    <p class="muted small">
+                        Follow a comfortable, natural pace.
+                        Do not force or hold your breath.
+                    </p>
+
+                    <button id="startBreathing" class="btn" type="button">
+                        Start
+                    </button>
+
+                    <button id="resetBreathing" class="btn btn-soft" type="button">
+                        Reset
+                    </button>
+
                 </div>
+
             </section>
 
+
+            <!-- AI ANALYSIS -->
             <section id="analysisView" class="app-view hidden">
+
                 <div class="card">
-                    <h2 class="view-title">AI Analysis </h2>
-                    <p class="muted">Retrieve the latest result saved to your AERIA AI account.</p>
+
+                    <h2 class="view-title">
+                        AI Analysis
+                    </h2>
+
+                    <p class="muted">
+                        Retrieve the latest result saved to your AERIA AI account.
+                    </p>
+
                     <div class="result-box" aria-live="polite">
-                        <h3 id="analysisResult">Belum dianalisis</h3>
-                        <p id="confidence">Confidence: 0%</p><p id="analysisMessage" class="muted small">Press â€œView Analysisâ€ to check for a saved result.</p>
+
+                        <h3 id="analysisResult">
+                            Belum dianalisis
+                        </h3>
+
+                        <p id="confidence">
+                            Confidence: 0%
+                        </p>
+
+                        <p id="analysisMessage" class="muted small">
+                            Press "View Analysis" to check for a saved result.
+                        </p>
+
                     </div>
-                    <button id="viewAnalysisButton" class="btn" type="button">View Analysis</button>
+
+                    <button id="viewAnalysisButton" class="btn" type="button">
+                        View Analysis
+                    </button>
+
                     <div class="disclaimer">
-                        <strong>Important notice:</strong> AI results are preliminary screening and precautionary indicators only. They are not a medical diagnosis and cannot confirm a health condition. Please consult a doctor or qualified healthcare professional for further assessment and information.
+
+                        <strong>Important notice:</strong>
+
+                        AI results are preliminary screening and
+                        precautionary indicators only. They are not a
+                        medical diagnosis and cannot confirm a health
+                        condition. Please consult a doctor or qualified
+                        healthcare professional for further assessment
+                        and information.
+
                     </div>
+
                 </div>
+
             </section>
 
+
+            <!-- MY DATA -->
             <section id="dataView" class="app-view hidden">
-                <div class="card">
-                    <h2 class="view-title">My Data </h2>
-                    <p class="muted">Your latest saved analysis records will appear here.</p>
-                    <div class="chart-card">
-    <h3>AI Analysis Overview</h3>
 
-    <p>Penat</p>
-    <div class="chart-track">
-        <div id="penatBar" class="chart-bar"></div>
-    </div>
-    <p id="penatCount">0 records</p>
+                <div class="card"><h2 class="view-title">
+                        My Data
+                    </h2>
 
-    <p>Tak Penat</p>
-    <div class="chart-track">
-        <div id="takPenatBar" class="chart-bar"></div>
-    </div>
-    <p id="takPenatCount">0 records</p>
+                    <p class="muted">
+                        Your latest saved analysis records will appear here.
+                    </p>
 
-    <p id="totalCount">Total analyses: 0</p>
-</div>
                     <div id="historyData" aria-live="polite">
-                        <p class="muted">No analysis records loaded yet.</p>
+
+                        <p class="muted">
+                            No analysis records loaded yet.
+                        </p>
+
                     </div>
-                    <button id="refreshHistory" class="btn" type="button">Refresh data</button>
+
+                    <button id="refreshHistory" class="btn" type="button">
+                        Refresh data
+                    </button>
+
                 </div>
+
             </section>
+
         </section>
+
     </main>
 
-    <footer>AERIA AI Â· A breathing and wellness support prototype</footer>
+
+    <footer>
+        AERIA AI · A breathing and wellness support prototype
+    </footer>
+
 
     <script>
+
         const $ = (id) => document.getElementById(id);
 
+
+        // API REQUEST
         async function apiRequest(url, options = {}) {
+
             const response = await fetch(url, {
                 credentials: "same-origin",
                 cache: "no-store",
                 ...options
             });
+
             const data = await response.json().catch(() => ({}));
-            return { response, data };
+
+            return {
+                response,
+                data
+            };
         }
 
+
+        // SHOW LOGIN
         function showLogin() {
+
             $("loginPage").classList.remove("hidden");
             $("registerPage").classList.add("hidden");
             $("appPage").classList.add("hidden");
+
         }
 
+
+        // SHOW REGISTER
         function showRegister() {
+
             $("loginPage").classList.add("hidden");
             $("registerPage").classList.remove("hidden");
             $("appPage").classList.add("hidden");
+
         }
 
+
+        // SHOW HOME
         function showHome(username) {
+
             $("loginPage").classList.add("hidden");
             $("registerPage").classList.add("hidden");
             $("appPage").classList.remove("hidden");
-            $("welcomeTitle").textContent = "Welcome, " + username + "!";
-            openView("homeView");
-       
 
-        function op     getHistory();
-        }enView(viewId) {
-            document.querySelectorAll(".app-view").forEach((view) => {
-                view.classList.toggle("hidden", view.id !== viewId);
-            });
-            if (viewId === "dataView") getHistory();
+            $("welcomeTitle").textContent =
+                "Welcome, " + username + "!";
+
+            openView("homeView");
+
         }
 
+
+        // OPEN APP VIEW
+        function openView(viewId) {
+
+            document.querySelectorAll(".app-view").forEach((view) => {
+
+                view.classList.toggle(
+                    "hidden",
+                    view.id !== viewId
+                );
+
+            });
+
+            if (viewId === "dataView") {
+                getHistory();
+            }
+
+        }
+
+
+        // REGISTER
         async function register() {
+
             const username = $("registerUsername").value.trim();
             const password = $("registerPassword").value;
+
             $("registerMessage").textContent = "Creating account...";
             $("registerButton").disabled = true;
+
             try {
-                const { response, data } = await apiRequest("/api/register", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ username, password })
-                });
+
+                const { response, data } = await apiRequest(
+                    "/api/register",
+                    {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            username,
+                            password
+                        })
+                    }
+                );
+
                 if (!response.ok) {
-                    $("registerMessage").textContent = data.error || "Registration failed.";
+
+                    $("registerMessage").textContent =
+                        data.error || "Registration failed.";
+
                     return;
+
                 }
-                $("loginMessage").textContent = "Account created. Please log in.";
+
+                $("loginMessage").textContent =
+                    "Account created. Please log in.";
+
                 $("loginUsername").value = username;
                 $("loginPassword").value = "";
+
                 showLogin();
+
             } catch (error) {
+
                 console.error("Registration error:", error);
-                $("registerMessage").textContent = "Connection error. Please try again.";
+
+                $("registerMessage").textContent =
+                    "Connection error. Please try again.";
+
             } finally {
+
                 $("registerButton").disabled = false;
+
             }
-        }async function login() {
-            const username = $("loginUsername").value.trim();
+
+        }
+
+
+        // LOGIN
+        async function login() {const username = $("loginUsername").value.trim();
             const password = $("loginPassword").value;
+
             $("loginMessage").textContent = "Logging in...";
             $("loginButton").disabled = true;
+
             try {
-                const { response, data } = await apiRequest("/api/login", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ username, password })
-                });
+
+                const { response, data } = await apiRequest(
+                    "/api/login",
+                    {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            username,
+                            password
+                        })
+                    }
+                );
+
                 if (!response.ok) {
-                    $("loginMessage").textContent = data.error || "Login failed.";
+
+                    $("loginMessage").textContent =
+                        data.error || "Login failed.";
+
                     return;
+
                 }
+
                 $("loginMessage").textContent = "";
+
                 showHome(data.username || username);
+
             } catch (error) {
+
                 console.error("Login error:", error);
-                $("loginMessage").textContent = "Connection error. Please try again.";
+
+                $("loginMessage").textContent =
+                    "Connection error. Please try again.";
+
             } finally {
+
                 $("loginButton").disabled = false;
+
             }
+
         }
 
-        async function logout() {
-            try {
-                await apiRequest("/api/logout", { method: "POST" });
-            } catch (error) {
-                console.error("Logout error:", error);
-            }
-            stopBreathing();
-            showLogin();
-            $("loginPassword").value = "";
-            $("loginMessage").textContent = "You have been logged out.";
-        }
 
-        async function checkLogin() {
-            try {
-                const { response, data } = await apiRequest("/api/me");
-                if (response.ok && data.logged_in) {
-                    showHome(data.username || "there");
-                } else {
-                    showLogin();
-                }
-            } catch (error) {
-                console.error("Login check error:", error);
-                showLogin();
-            }
-        }
-
-        // 60-second breathing activity
-        let timeLeft = 60;
-        let elapsedTime = 0;
-        let timerInterval = null;
-
-        function updateBreathing() {
-            $("timer").textContent = timeLeft;
-            if (elapsedTime % 8 < 4) {
-                $("breathText").textContent = "Inhale gently";
-                $("breathCircle").textContent = "Inhale";
-                $("breathCircle").style.transform = "scale(1.12)";
-            } else {
-                $("breathText").textContent = "Exhale gently";
-                $("breathCircle").textContent = "Exhale";
-                $("breathCircle").style.transform = "scale(0.9)";
-            }
-        }
-
-        function startBreathing() {
-            if (timerInterval !== null) return;
-            if (timeLeft <= 0) resetBreathing();
-            timerInterval = setInterval(() => {
-                timeLeft--;
-                elapsedTime++;
-                if (timeLeft <= 0) {
-                    stopBreathing();
-                    $("timer").textContent = "0";
-                    $("breathText").textContent = "Session completed! ðŸŒ·";
-                    $("breathCircle").textContent = "Done";
-                    $("breathCircle").style.transform = "scale(1)";
-                    return;
-                }
-                updateBreathing();
-            }, 1000);
-            updateBreathing();
-        }
-
-        function stopBreathing() {
-            if (timerInterval !== null) {
-                clearInterval(timerInterval);
-                timerInterval = null;
-            }
-        }
-
-        function resetBreathing() {
-            stopBreathing();
-            timeLeft = 60;
-            elapsedTime = 0;
-            $("timer").textContent = "60";
-            $("breathText").textContent = "Ready to begin?";
-            $("breathCircle").textContent = "Ready";
-            $("breathCircle").style.transform = "scale(1)";
-        }// Retrieve the latest saved AI result
-        async function getAnalysis() {
-            const resultBox = $("analysisResult");
-            const confidenceBox = $("confidence");
-            const messageBox = $("analysisMessage");
-            const button = $("viewAnalysisButton");
-
-            resultBox.textContent = "Loading analysis...";
-            confidenceBox.textContent = "";
-            messageBox.textContent = "Connecting to AERIA AI...";
-            button.disabled = true;
-
-            try {
-                const { response, data } = await apiRequest("/api/analysis?time=" + Date.now());
-                if (!response.ok) {
-                    resultBox.textContent = data.error || "Unable to load analysis.";
-                    messageBox.textContent = "Please check your login and connection.";
-                    return;
-                }
-                resultBox.textContent = data.class || "No analysis available.";
-                confidenceBox.textContent = "Confidence: " + (data.confidence ?? 0) + "%";
-                if (data.class === "Belum dianalisis") {
-                    messageBox.textContent = "No AI result has been saved yet. Waiting for data from the AI system.";
-                } else {
-                    messageBox.textContent = "Latest saved result retrieved successfully.";
-                }
-            } catch (error) {
-                console.error("Analysis error:", error);
-                resultBox.textContent = "Connection error.";
-                messageBox.textContent = "Unable to connect to the analysis service.";
-            } finally {
-                button.disabled = false;
-            }
-        }
-
-        // Retrieve saved analysis history
-        async function getHistory() {
-            const container = $("historyData");
-            container.textContent = "Loading data...";
-            try {
-                const { response, data } = await apiRequest("/api/history?time=" + Date.now());
-                if (!response.ok) {
-                    container.textContent = data.error || "Unable to load data.";
-                    return;
-                }
-                container.innerHTML = "";
-                if (!Array.isArray(data.history) || data.history.length === 0) {
-                    container.textContent = "No analysis records yet.";
-                    return;
-                }
-                const penat = data.history.filter(
-    record => record.result.toLowerCase() === "penat"
-).length;
-
-const takPenat = data.history.filter(
-    record => record.result.toLowerCase() === "tak penat"
-).length;
-
-const total = penat + takPenat;
-
-$("penatCount").textContent = penat + " records";
-$("takPenatCount").textContent = takPenat + " records";
-$("totalCount").textContent = "Total analyses: " + total;
-
-$("penatBar").style.width =
-    (total ? (penat / total) * 100 : 0) + "%";
-
-$("takPenatBar").style.width =
-    (total ? (takPenat / total) * 100 : 0) + "%";
-                data.history.forEach((record) => {
-                    const card = document.createElement("div");
-                    card.className = "history-card";
-                    const result = document.createElement("h3");
-                    result.textContent = record.result || "Unknown result";
-                    const confidence = document.createElement("p");
-                    confidence.textContent = "Confidence: " + (record.confidence ?? 0) + "%";
-                    const date = document.createElement("p");
-                    date.textContent = "Date: " + (record.date || "Not available");
-                    card.append(result, confidence, date);
-                    container.appendChild(card);
-                });
-            } catch (error) {
-                console.error("History error:", error);
-                container.textContent = "Connection error.";
-            }
-        }
-
-        // Button and navigation events
-        $("goRegister").addEventListener("click", showRegister);
-        $("goLogin").addEventListener("click", showLogin);
-        $("loginButton").addEventListener("click", login);
-        $("registerButton").addEventListener("click", register);
-        $("logoutButton").addEventListener("click", logout);
-        $("startBreathing").addEventListener("click", startBreathing);
-        $("resetBreathing").addEventListener("click", resetBreathing);
-        $("viewAnalysisButton").addEventListener("click", getAnalysis);
-        $("refreshHistory").addEventListener("click", getHistory);document.querySelectorAll("nav button[data-view]").forEach((button) => {
-            button.addEventListener("click", () => openView(button.dataset.view));
-        });
-        document.querySelectorAll("[data-open-view]").forEach((button) => {
-            button.addEventListener("click", () => openView(button.dataset.openView));
-        });
-
-        // Start the app by checking whether a user is already logged in
-        checkLogin();
-    </script>
-</body>
-</html>
-            border-radius: 20px;
+        // LOGOUT
