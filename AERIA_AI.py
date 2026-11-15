@@ -225,40 +225,32 @@ def device_analysis():
     username = os.environ.get("AERIA_DEVICE_USERNAME")
 
     if not api_key or not username:
-        return jsonify({
-            "error": "Device not configured"
-        }), 500
+        return jsonify({"error": "Device not configured"}), 500
 
-    if data.get("api_key"):
+    if not data.get("api_key"):
         return jsonify({"error": "API key missing"}), 401
 
-if data.get("api_key") != api_key:
+    if data.get("api_key") != api_key:
         return jsonify({"error": "API key mismatch"}), 401
-    
+
     result = str(data.get("class", "")).strip()
 
- if result == "tidak penat":
-    result = "tak penat"
+    if result == "tidak penat":
+        result = "tak penat"
 
- if result not in ["penat", "tak penat"]:
-        return jsonify({
-            "error": "Invalid class"
-        }), 400
+    if result not in ["penat", "tak penat"]:
+        return jsonify({"error": "Invalid class"}), 400
 
     try:
         confidence = float(data.get("confidence", 0))
     except (ValueError, TypeError):
-        return jsonify({
-            "error": "Invalid confidence"
-        }), 400
+        return jsonify({"error": "Invalid confidence"}), 400
 
     if 0 <= confidence <= 1:
         confidence = confidence * 100
 
     if not 0 <= confidence <= 100:
-        return jsonify({
-            "error": "Invalid confidence"
-        }), 400
+        return jsonify({"error": "Invalid confidence"}), 400
 
     with get_db() as db:
         user = db.execute(
@@ -267,9 +259,7 @@ if data.get("api_key") != api_key:
         ).fetchone()
 
         if user is None:
-            return jsonify({
-                "error": "User not found"
-            }), 404
+            return jsonify({"error": "User not found"}), 404
 
         db.execute("""
             INSERT INTO analyses (user_id, result, confidence)
@@ -281,8 +271,7 @@ if data.get("api_key") != api_key:
         "class": result,
         "confidence": confidence
     }), 200
-
-
+    
 @app.route("/api/history", methods=["GET"])
 @login_required
 def history():
