@@ -352,7 +352,7 @@ def status():
         "status": "online"
     })# RUN APPLICATION
 
-if name == "main":
+if name == "__main__":
     port = int(os.environ.get("PORT", 5000))
 
     app.run(
