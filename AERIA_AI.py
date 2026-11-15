@@ -168,7 +168,9 @@ def analysis():
                 WHERE user_id = ?
                 ORDER BY id DESC
                 LIMIT 1
-            """, (user_id,)).fetchone()if record is None:
+            """, (user_id,)).fetchone()
+            
+            if record is None:
             return jsonify({
                 "class": "Belum dianalisis",
                 "confidence": 0
